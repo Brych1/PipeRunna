@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class MovingUtils:ScriptableObject
+public class MovingUtils
 {
 	public IEnumerator MoveToPoint(Vector3 newPos, float time, GameObject cube)
 	{
