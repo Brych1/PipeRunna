@@ -5,26 +5,25 @@ public class PlayerController : MonoBehaviour
 {
 	public float InputDelay;
 	public float MovementVelocity;
+	private float horizontalInput;
+	private float verticalInput;
 	public Rigidbody Rbody;
-	private float HorizontalInput;
-
-	private float VerticalInput;
 
 	private void GetInput()
 	{
-		VerticalInput = Input.GetAxis("Vertical");
-		HorizontalInput = Input.GetAxis("Horizontal");
+		verticalInput = Input.GetAxis("Vertical");
+		horizontalInput = Input.GetAxis("Horizontal");
 	}
 
 	private void Move()
 	{
-		if (Mathf.Abs(VerticalInput) > InputDelay)
+		if (Mathf.Abs(verticalInput) > InputDelay)
 		{
-			Rbody.velocity = transform.up * VerticalInput * MovementVelocity;
+			Rbody.velocity = transform.up * verticalInput * MovementVelocity;
 		}
-		else if (Mathf.Abs(HorizontalInput) > InputDelay)
+		else if (Mathf.Abs(horizontalInput) > InputDelay)
 		{
-			Rbody.velocity = -transform.forward * HorizontalInput * MovementVelocity;
+			Rbody.velocity = -transform.forward * horizontalInput * MovementVelocity;
 		}
 		else
 		{
@@ -35,11 +34,8 @@ public class PlayerController : MonoBehaviour
 	#region UnityAPI
 	private void Start()
 	{
-		if (Rbody == null)
-		{
-			Debug.Log("Please drag player GO into inspector");
-		}
-		VerticalInput = HorizontalInput = 0;
+		Rbody = GetComponent<Rigidbody>();
+		verticalInput = horizontalInput = 0;
 	}
 
 	private void Update()

@@ -5,14 +5,21 @@ using Random = System.Random;
 
 public class ObstacleControl : MonoBehaviour
 {
-	public float delayTime;
-	public float movmentTime;
-	public float rotationTime;
+	public float DelayTime;
+	public float ObstacleMovmentTime;
+	public float RotationTime;
+	public Vector3 TargetRotation;
+	public Transform DestructionTransform;
+	public float SegMovementSpeed;
 	private List<GameObject> children = new List<GameObject>();
+	private int obstacleIndex;
 	private MovingUtils ObstacleMove = new MovingUtils();
 	private Random rng = new Random();
 
-	
+	private void ObstacleWrapper()
+	{
+		StartCoroutine(ObstacleMove.MoveToPoint(children[obstacleIndex].transform.GetChild(0).position, ObstacleMovmentTime, children[obstacleIndex]));
+	}
 
 	#region UnityAPI
 	private void Awake()
@@ -22,16 +29,19 @@ public class ObstacleControl : MonoBehaviour
 		{
 			children.Add(child.gameObject);
 		}
-		int i = rng.Next(0, children.Count);
-		Debug.Log(i);
-		//ObstacleMove.MoveToPoint(children[i].transform.GetChild(0).position, movmentTime, children[i]));
-		StartCoroutine(ObstacleMove.MoveToPoint(children[i].transform.GetChild(0).position,movmentTime,children[i]));
+		obstacleIndex = rng.Next(0, children.Count);
 	}
 
 	private void Start()
-	{ }
+	{
+		StartCoroutine(ObstacleMove.RotateToAngle(TargetRotation, RotationTime, gameObject));
+		Invoke("ObstacleWrapper", DelayTime);
+	}
 
 	private void Update()
-	{ }
+	{
+		float step = SegMovementSpeed * Time.deltaTime;
+		transform.position = Vector3.MoveTowards(transform.position,DestructionTransform.position,step);
+	}
 	#endregion
 }
