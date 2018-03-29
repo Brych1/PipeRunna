@@ -6,15 +6,16 @@ using Random = System.Random;
 public class ObstacleControl : MonoBehaviour
 {
 	public float DelayTime;
+	public Transform DestructionTransform;
 	public float ObstacleMovmentTime;
 	public float RotationTime;
-	public Vector3 TargetRotation;
-	public Transform DestructionTransform;
 	public float SegMovementSpeed;
+	public Vector3 TargetRotation;
 	private List<GameObject> children = new List<GameObject>();
 	private int obstacleIndex;
 	private MovingUtils ObstacleMove = new MovingUtils();
 	private Random rng = new Random();
+	private float step;
 
 	private void ObstacleWrapper()
 	{
@@ -24,8 +25,8 @@ public class ObstacleControl : MonoBehaviour
 	#region UnityAPI
 	private void Awake()
 	{
-		List<MeshCollider> tempList = GetComponentsInChildren<MeshCollider>().Where(x => x.gameObject.transform.parent != transform.parent).ToList();
-		foreach (MeshCollider child in tempList)
+		List<BoxCollider> tempList = GetComponentsInChildren<BoxCollider>().Where(x => x.gameObject.transform.parent != transform.parent).ToList();
+		foreach (BoxCollider child in tempList)
 		{
 			children.Add(child.gameObject);
 		}
@@ -40,8 +41,8 @@ public class ObstacleControl : MonoBehaviour
 
 	private void Update()
 	{
-		float step = SegMovementSpeed * Time.deltaTime;
-		transform.position = Vector3.MoveTowards(transform.position,DestructionTransform.position,step);
+		step = SegMovementSpeed * Time.deltaTime;
+		transform.position = Vector3.MoveTowards(transform.position, DestructionTransform.position, step);
 	}
-	#endregion
 }
+#endregion
